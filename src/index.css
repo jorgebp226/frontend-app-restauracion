@@ -1,0 +1,160 @@
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142.1 76.2% 36.3%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142.4 71.8% 29.2%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Estilos personalizados para la navegación */
+.nav-item {
+  @apply flex items-center gap-2 px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200;
+}
+
+.nav-item.active {
+  @apply bg-emerald-50 text-emerald-600;
+}
+
+/* Estilos para las tarjetas */
+.metric-card {
+  @apply bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-200;
+}
+
+/* Estilos para la tabla */
+.data-table {
+  @apply w-full border-collapse;
+}
+
+.data-table th {
+  @apply px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+}
+
+.data-table td {
+  @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+}
+
+.data-table tr {
+  @apply hover:bg-gray-50 transition-colors duration-150;
+}
+
+/* Estilos para los gráficos */
+.chart-container {
+  @apply bg-white rounded-xl shadow-sm p-6;
+}
+
+.chart-title {
+  @apply text-lg font-semibold mb-4 text-gray-900;
+}
+
+/* Estilos para el AI Assistant */
+.ai-assistant-card {
+  @apply bg-emerald-50 rounded-xl p-6 relative overflow-hidden;
+}
+
+.ai-assistant-card::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent;
+}
+
+/* Estilos para los badges */
+.status-badge {
+  @apply px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.status-badge-success {
+  @apply bg-emerald-100 text-emerald-800;
+}
+
+.status-badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+/* Estilos para los botones */
+.btn-primary {
+  @apply bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-200;
+}
+
+/* Estilos para el layout principal */
+.main-layout {
+  @apply flex min-h-screen bg-gray-50;
+}
+
+.main-content {
+  @apply flex-1 p-8;
+}
+
+/* Estilos para el encabezado de la página */
+.page-header {
+  @apply mb-8;
+}
+
+.page-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.breadcrumb {
+  @apply flex items-center space-x-2 text-sm text-gray-500;
+}
+
+/* Estilos para los inputs */
+.search-input {
+  @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent;
+}
