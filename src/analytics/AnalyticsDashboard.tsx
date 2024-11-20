@@ -37,6 +37,7 @@ const AIAssistantCard = () => (
     </div>
   </div>
 );
+export default AIAssistantCard;
 
 const RevenueChart = () => {
   const data = [

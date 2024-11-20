@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-brainstormers-dev-4a84c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::851725450257:role/amplify-brainstormers-dev-4a84c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::851725450257:role/amplify-brainstormers-dev-4a84c-authRole",
+      "Region": "eu-west-3",
+      "DeploymentBucketName": "amplify-brainstormers-dev-4a84c-deployment",
+      "UnauthRoleName": "amplify-brainstormers-dev-4a84c-unauthRole",
+      "StackName": "amplify-brainstormers-dev-4a84c",
+      "StackId": "arn:aws:cloudformation:eu-west-3:851725450257:stack/amplify-brainstormers-dev-4a84c/e5c2c8d0-a743-11ef-8daf-0ae8d4f201e1",
+      "AmplifyAppId": "dtjw8qa8n9io4"
+    }
+  }
+}

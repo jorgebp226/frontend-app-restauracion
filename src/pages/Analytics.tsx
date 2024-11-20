@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { AIAssistantCard } from '../analytics/AIAssistantCard';
+import AIAssistantCard from '../analytics/AnalyticsDashboard';
 import { MetricsSection } from '../analytics/MetricsSection';
-import RevenueChart from '../analytics/RevenueChart';
+import { RevenueChart } from '../analytics/RevenueChart';
 import ProductTable from '../analytics/ProductTable';
-import ProductDetail from '../analytics/ProductAnalytics';
-const Analytics = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
+//import { ProductDetail } from '../analytics/ProductDetail';
+import { Product } from '../types/analytics';
+import { ChevronRight } from 'lucide-react';
+
+const Analytics: React.FC = () => {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -14,7 +17,7 @@ const Analytics = () => {
           <h1 className="text-3xl font-bold text-gray-900">Product Sales Performance</h1>
           <div className="flex items-center text-sm text-gray-500 mt-1">
             <span>Sales</span>
-            <span className="mx-2">→</span>
+            <ChevronRight size={16} />
             <span>Tech Products</span>
           </div>
         </div>
@@ -42,13 +45,7 @@ const Analytics = () => {
         </div>
       </div>
 
-      {/* Modal de detalle del producto */}
-      {selectedProduct && (
-        <ProductDetail 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-        />
-      )}
+
     </div>
   );
 };
