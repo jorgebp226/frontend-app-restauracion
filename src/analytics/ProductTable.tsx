@@ -347,6 +347,11 @@ export const ProductTable: FC<ProductTableProps> = ({ onProductClick }) => {
                   {product.stock || 0} units
                 </span>
                 </td>
+                <td className="px-6 py-4">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getClassificationColor(product.classification)}`}>
+                    {product.classification}
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>

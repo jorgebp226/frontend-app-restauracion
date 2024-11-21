@@ -1,4 +1,3 @@
-import { type FC } from 'react';
 
 export interface Product {
     code: string;
