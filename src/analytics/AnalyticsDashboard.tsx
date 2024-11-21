@@ -182,11 +182,11 @@ export const AnalyticsDashboard: FC = () => {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Product Sales Performance</h1>
+        <h1 className="text-3xl font-bold mb-2">Ingeniería de Menus</h1>
         <div className="flex items-center text-sm text-gray-500">
-          <span>Sales</span>
+          <span>Ventas</span>
           <ChevronRight size={16} />
-          <span>Tech Products</span>
+          <span>Shawarma</span>
         </div>
       </div>
 
