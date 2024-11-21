@@ -1,5 +1,5 @@
 // src/analytics/AnalyticsDashboard.tsx
-import React from 'react';
+import React, { type FC } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceDot 
 } from 'recharts';
@@ -14,6 +14,7 @@ import {
   Share2, 
   MoreVertical 
 } from 'lucide-react';
+import { CustomTooltipProps } from '../types/analytics';
 
 const AIAssistantCard = () => (
   <div className="bg-emerald-50 rounded-xl p-6 shadow-sm">
@@ -37,7 +38,6 @@ const AIAssistantCard = () => (
     </div>
   </div>
 );
-export default AIAssistantCard;
 
 const RevenueChart = () => {
   const data = [
@@ -49,7 +49,7 @@ const RevenueChart = () => {
     { month: 'Aug', revenue2022: 32, revenue2023: 36 }
   ];
 
-  const CustomTooltip = ({ active, payload }) => {
+  const CustomTooltip: FC<CustomTooltipProps> = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-100">
@@ -177,7 +177,7 @@ const MetricCard = ({ title, value, trend, icon: Icon }) => (
   </div>
 );
 
-const AnalyticsDashboard = () => {
+export const AnalyticsDashboard: FC = () => {
   return (
     <div className="space-y-6">
       <div className="mb-8">

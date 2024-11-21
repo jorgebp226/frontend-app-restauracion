@@ -1,12 +1,19 @@
 export interface Product {
     id: string;
     name: string;
-    category: string;
+    code: string;
+    totalSales: number;
+    profitability: number;
+    cost: number;
     price: number;
-    sales: number;
-    stock: number;
-    trend?: number;
-    status?: 'In Stock' | 'Low Stock' | 'Out of Stock';
+    priceNoVAT: number;
+    foodCost: number;
+    totalCost: number;
+    unitsSold: number;
+    margin: number;
+    salesPercentage: number;
+    irp: number;
+    classification: 'ESTRELLA' | 'PERRO' | 'PUZZLE' | 'VACA';
   }
   
   export interface Column {
@@ -35,8 +42,12 @@ export interface Product {
   
   export interface CustomTooltipProps {
     active?: boolean;
-    payload?: any[];
-    label?: string;
+    payload?: Array<{
+      value: number;
+      payload: {
+        month: string;
+      };
+    }>;
   }
   
   export interface ProductTableProps {

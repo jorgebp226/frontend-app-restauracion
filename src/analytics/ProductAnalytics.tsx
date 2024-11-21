@@ -1,13 +1,9 @@
-import React from 'react';
+import { type FC } from 'react';
 import { Product } from '../types/analytics';
 import { 
-  LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, 
+  XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar 
 } from 'recharts';
-import { 
-  TrendingUp, DollarSign, ShoppingCart, ArrowUpRight, 
-  ArrowDownRight, X, ChevronLeft 
-} from 'lucide-react';
 
 interface ProductDetailProps {
   product: Product;

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './layout/Sidebar';
 import AnalyticsDashboard from './analytics/AnalyticsDashboard';
-import ProductTable from './analytics/ProductTable';
 import ProductDetail from './analytics/ProductAnalytics';
+import { ProductTable } from './analytics/ProductTable';
 
 const App = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
