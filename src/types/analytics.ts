@@ -1,17 +1,21 @@
+import { type FC } from 'react';
+
 export interface Product {
-    id: string;
-    name: string;
     code: string;
-    totalSales: number;
-    profitability: number;
+    name: string;
     cost: number;
     price: number;
     priceNoVAT: number;
+    popularityIndex: number;
     foodCost: number;
+    profitability: number;
+    totalSales: number;
+    totalContribution: number;
     totalCost: number;
     unitsSold: number;
     margin: number;
     salesPercentage: number;
+    marginPercentage: number;
     irp: number;
     classification: 'ESTRELLA' | 'PERRO' | 'PUZZLE' | 'VACA';
   }

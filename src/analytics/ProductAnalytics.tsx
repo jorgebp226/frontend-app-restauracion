@@ -1,5 +1,14 @@
 import { type FC } from 'react';
-import { Product } from '../types/analytics';
+import { 
+  ArrowUpRight, 
+  ArrowDownRight, 
+  ChevronLeft, 
+  X, 
+  ShoppingCart, 
+  TrendingUp, 
+  DollarSign 
+} from 'lucide-react';
+import { Product, MetricCardProps } from '../types/analytics';
 import { 
   XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar 
@@ -8,13 +17,6 @@ import {
 interface ProductDetailProps {
   product: Product;
   onClose: () => void;
-}
-
-interface MetricCardProps {
-  title: string;
-  value: string | number;
-  trend?: number;
-  icon: React.ComponentType<{ size?: string | number; className?: string }>;
 }
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
@@ -36,7 +38,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
 
   const COLORS = ['#10b981', '#6366f1', '#f59e0b'];
 
-  const MetricCard = ({ title, value, trend, icon: Icon }) => (
+  const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }) => (
     <div className="bg-white rounded-xl p-6 shadow-sm">
       <div className="flex justify-between items-start mb-2">
         <span className="text-gray-500 text-sm">{title}</span>

@@ -4,9 +4,14 @@ import Sidebar from './layout/Sidebar';
 import AnalyticsDashboard from './analytics/AnalyticsDashboard';
 import ProductDetail from './analytics/ProductAnalytics';
 import { ProductTable } from './analytics/ProductTable';
+import { Product } from './types/analytics';
 
 const App = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+  };
 
   return (
     <Router>
@@ -19,7 +24,7 @@ const App = () => {
               element={
                 <div className="space-y-6 p-6">
                   <AnalyticsDashboard />
-                  <ProductTable onProductClick={setSelectedProduct} />
+                  <ProductTable onProductClick={handleProductClick} />
                   {selectedProduct && (
                     <ProductDetail 
                       product={selectedProduct} 

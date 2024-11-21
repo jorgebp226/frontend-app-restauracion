@@ -1,11 +1,7 @@
 // src/analytics/ProductTable.tsx
-import React, { useState } from 'react';
+import { type FC, useState } from 'react';
 import { ArrowUpDown, Package } from 'lucide-react';
 import { Product, Column, ProductTableProps } from '../types/analytics';
-
-interface ClassificationBadgeProps {
-  classification: Product['classification'];
-}
 
 const CLASSIFICATION_COLORS: Record<Product['classification'], string> = {
   ESTRELLA: 'bg-yellow-100 text-yellow-800',
@@ -14,13 +10,7 @@ const CLASSIFICATION_COLORS: Record<Product['classification'], string> = {
   VACA: 'bg-green-100 text-green-800'
 };
 
-const ClassificationBadge: React.FC<ClassificationBadgeProps> = ({ classification }) => (
-  <span className={`px-2 py-1 rounded-full text-xs font-medium ${CLASSIFICATION_COLORS[classification]}`}>
-    {classification}
-  </span>
-);
-
-export const ProductTable: React.FC<ProductTableProps> = ({ onProductClick }) => {
+export const ProductTable: FC<ProductTableProps> = ({ onProductClick }) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Product;
     direction: 'asc' | 'desc';
@@ -28,16 +18,25 @@ export const ProductTable: React.FC<ProductTableProps> = ({ onProductClick }) =>
 
   const sampleData: Product[] = [
     {
-      id: '1',
-      name: 'Laptop Pro X',
-      category: 'Electronics',
-      price: 1299.99,
-      sales: 450,
-      stock: 75,
-      trend: 12.5,
-      status: 'In Stock'
+      code: 'C001',
+      name: 'SHAWARMA POLLO NORMAL',
+      cost: 3.45,
+      price: 11.40,
+      priceNoVAT: 10.26,
+      popularityIndex: 7.40,
+      foodCost: 33.53,
+      profitability: 66.47,
+      totalSales: 15528.99,
+      totalContribution: 9290.15,
+      totalCost: 4685.94,
+      unitsSold: 1362,
+      margin: 6.82,
+      salesPercentage: 7.33,
+      marginPercentage: 7.58,
+      irp: 1.02,
+      classification: 'VACA'
     },
-    // Agrega más productos aquí
+    // Puedes agregar más productos aquí siguiendo el mismo formato
   ];
 
   const handleSort = (data: Product[], key: keyof Product, direction: 'asc' | 'desc'): Product[] => {
@@ -59,11 +58,12 @@ export const ProductTable: React.FC<ProductTableProps> = ({ onProductClick }) =>
   };
 
   const columns: Column[] = [
-    { key: 'name', title: 'Product Name', sortable: true },
-    { key: 'category', title: 'Category', sortable: true },
-    { key: 'price', title: 'Price', sortable: true },
-    { key: 'sales', title: 'Sales', sortable: true },
-    { key: 'stock', title: 'Stock', sortable: true }
+    { key: 'code', title: 'Código', sortable: true },
+    { key: 'name', title: 'Nombre', sortable: true },
+    { key: 'price', title: 'PVP', sortable: true },
+    { key: 'totalSales', title: 'Ventas totales', sortable: true },
+    { key: 'profitability', title: 'Rentabilidad', sortable: true },
+    { key: 'classification', title: 'Clasificación', sortable: true }
   ];
 
   const sortedData = sortConfig ? 
@@ -108,7 +108,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ onProductClick }) =>
           <tbody className="divide-y divide-gray-200">
             {sortedData.map((product) => (
               <tr 
-                key={product.id}
+                key={product.code}
                 className="hover:bg-gray-50 cursor-pointer"
                 onClick={() => onProductClick(product)}
               >
@@ -120,7 +120,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ onProductClick }) =>
                         {product.name}
                       </div>
                       <div className="text-sm text-gray-500">
-                        ID: {product.id}
+                        ID: {product.code}
                       </div>
                     </div>
                   </div>
