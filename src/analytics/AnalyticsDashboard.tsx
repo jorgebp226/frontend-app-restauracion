@@ -73,8 +73,8 @@ const RevenueChart = () => {
     <div className="bg-white rounded-2xl shadow-sm p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Comparison of Revenue</h2>
-          <p className="text-sm text-gray-500">For all time</p>
+          <h2 className="text-lg font-semibold text-gray-900">Compararción de ingresos</h2>
+          <p className="text-sm text-gray-500">Desde el inicio</p>
         </div>
         <div className="flex gap-2">
           <button className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100">

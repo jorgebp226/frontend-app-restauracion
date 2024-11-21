@@ -270,8 +270,8 @@ export const ProductTable: FC<ProductTableProps> = ({ onProductClick }) => {
     <div className="bg-white rounded-xl shadow-sm">
       <div className="flex items-center justify-between p-6 border-b">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Products</h2>
-          <p className="text-sm text-gray-500">A list of all products</p>
+          <h2 className="text-lg font-semibold text-gray-900">Productos</h2>
+          <p className="text-sm text-gray-500">Una lista de los shawarmas</p>
         </div>
       </div>
       <div className="overflow-x-auto">
