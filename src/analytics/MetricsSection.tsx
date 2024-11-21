@@ -1,6 +1,7 @@
 // src/analytics/MetricsSection.tsx
 import React from 'react';
 import { TrendingUp, DollarSign } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { MetricCardProps } from '../types/analytics';
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, value, trend, icon: Icon }) => (

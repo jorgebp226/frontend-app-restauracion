@@ -1,170 +1,161 @@
+// src/analytics/ProductTable.tsx
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Search } from 'lucide-react';
+import { ArrowUpDown, Package } from 'lucide-react';
+import { Product, Column, ProductTableProps } from '../types/analytics';
 
-const ProductClassificationBadge = ({ classification }) => {
-  const colors = {
-    'ESTRELLA': 'bg-yellow-100 text-yellow-800',
-    'PERRO': 'bg-red-100 text-red-800',
-    'PUZZLE': 'bg-purple-100 text-purple-800',
-    'VACA': 'bg-blue-100 text-blue-800'
-  };
+interface ClassificationBadgeProps {
+  classification: Product['classification'];
+}
 
-  return (
-    <span className={`px-3 py-1 rounded-full text-xs font-medium ${colors[classification]}`}>
-      {classification}
-    </span>
-  );
+const CLASSIFICATION_COLORS: Record<Product['classification'], string> = {
+  ESTRELLA: 'bg-yellow-100 text-yellow-800',
+  PERRO: 'bg-red-100 text-red-800',
+  PUZZLE: 'bg-blue-100 text-blue-800',
+  VACA: 'bg-green-100 text-green-800'
 };
 
-const ProductTable = ({ onProductClick }) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
-  const [searchTerm, setSearchTerm] = useState('');
+const ClassificationBadge: React.FC<ClassificationBadgeProps> = ({ classification }) => (
+  <span className={`px-2 py-1 rounded-full text-xs font-medium ${CLASSIFICATION_COLORS[classification]}`}>
+    {classification}
+  </span>
+);
 
-  const products = [
+export const ProductTable: React.FC<ProductTableProps> = ({ onProductClick }) => {
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Product;
+    direction: 'asc' | 'desc';
+  } | null>(null);
+
+  const sampleData: Product[] = [
     {
-      code: 'D001',
-      name: 'HUMMUS',
-      cost: 1.52,
-      price: 7.99,
-      priceNoVAT: 7.19,
-      popularityIndex: 7.86,
-      foodCost: 21.14,
-      profitability: 78.86,
-      totalSales: 7302.86,
-      totalContribution: 5183.29,
-      totalCost: 1389.28,
-      unitsSold: 914,
-      margin: 5.67,
-      salesPercentage: 6.57,
-      marginPercentage: 6.90,
-      irp: 1.05,
-      classification: 'ESTRELLA'
+      id: '1',
+      name: 'Laptop Pro X',
+      category: 'Electronics',
+      price: 1299.99,
+      sales: 450,
+      stock: 75,
+      trend: 12.5,
+      status: 'In Stock'
     },
-    // Add more products here...
+    // Agrega más productos aquí
   ];
 
-  const sortData = (data, key, direction) => {
+  const handleSort = (data: Product[], key: keyof Product, direction: 'asc' | 'desc'): Product[] => {
     return [...data].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
-      return 0;
+      if (direction === 'asc') {
+        return a[key] > b[key] ? 1 : -1;
+      }
+      return a[key] < b[key] ? 1 : -1;
     });
   };
 
-  const handleSort = (key) => {
-    const direction = 
-      sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
-    setSortConfig({ key, direction });
+  const getSortIcon = (key: keyof Product): JSX.Element => {
+    if (!sortConfig || sortConfig.key !== key) {
+      return <ArrowUpDown size={16} className="ml-1" />;
+    }
+    return sortConfig.direction === 'asc' ? 
+      <ArrowUpDown size={16} className="ml-1 text-blue-500" /> : 
+      <ArrowUpDown size={16} className="ml-1 text-blue-500 transform rotate-180" />;
   };
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const columns: Column[] = [
+    { key: 'name', title: 'Product Name', sortable: true },
+    { key: 'category', title: 'Category', sortable: true },
+    { key: 'price', title: 'Price', sortable: true },
+    { key: 'sales', title: 'Sales', sortable: true },
+    { key: 'stock', title: 'Stock', sortable: true }
+  ];
 
-  const sortedProducts = sortConfig.key
-    ? sortData(filteredProducts, sortConfig.key, sortConfig.direction)
-    : filteredProducts;
-
-  const SortIcon = ({ column }) => {
-    if (sortConfig.key !== column) return null;
-    return sortConfig.direction === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />;
-  };
+  const sortedData = sortConfig ? 
+    handleSort(sampleData, sortConfig.key as keyof Product, sortConfig.direction) : 
+    sampleData;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">Productos</h2>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className="bg-white rounded-xl shadow-sm">
+      <div className="flex items-center justify-between p-6 border-b">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">Products</h2>
+          <p className="text-sm text-gray-500">A list of all products</p>
         </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b">
+              {columns.map((column) => (
                 <th 
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-600 cursor-pointer"
-                  onClick={() => handleSort('code')}
+                  key={column.key}
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  <div className="flex items-center gap-1">
-                    Código
-                    <SortIcon column="code" />
-                  </div>
+                  <button 
+                    className="flex items-center"
+                    onClick={() => {
+                      if (column.sortable) {
+                        setSortConfig({
+                          key: column.key as keyof Product,
+                          direction: sortConfig?.direction === 'asc' ? 'desc' : 'asc'
+                        });
+                      }
+                    }}
+                  >
+                    {column.title}
+                    {column.sortable && getSortIcon(column.key as keyof Product)}
+                  </button>
                 </th>
-                <th 
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-600 cursor-pointer"
-                  onClick={() => handleSort('name')}
-                >
-                  <div className="flex items-center gap-1">
-                    Nombre
-                    <SortIcon column="name" />
-                  </div>
-                </th>
-                <th 
-                  className="px-4 py-3 text-right text-sm font-semibold text-gray-600 cursor-pointer"
-                  onClick={() => handleSort('price')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    PVP
-                    <SortIcon column="price" />
-                  </div>
-                </th>
-                <th 
-                  className="px-4 py-3 text-right text-sm font-semibold text-gray-600 cursor-pointer"
-                  onClick={() => handleSort('popularityIndex')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    Popularidad
-                    <SortIcon column="popularityIndex" />
-                  </div>
-                </th>
-                <th 
-                  className="px-4 py-3 text-right text-sm font-semibold text-gray-600 cursor-pointer"
-                  onClick={() => handleSort('profitability')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    Rentabilidad
-                    <SortIcon column="profitability" />
-                  </div>
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                  Clasificación
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedProducts.map((product) => (
-                <tr 
-                  key={product.code}
-                  onClick={() => onProductClick(product)}
-                  className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
-                >
-                  <td className="px-4 py-4 text-sm text-gray-600">{product.code}</td>
-                  <td className="px-4 py-4 text-sm font-medium">{product.name}</td>
-                  <td className="px-4 py-4 text-sm text-right">{product.price.toFixed(2)} €</td>
-                  <td className="px-4 py-4 text-sm text-right">{product.popularityIndex}%</td>
-                  <td className="px-4 py-4 text-sm text-right">{product.profitability}%</td>
-                  <td className="px-4 py-4">
-                    <ProductClassificationBadge classification={product.classification} />
-                  </td>
-                </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {sortedData.map((product) => (
+              <tr 
+                key={product.id}
+                className="hover:bg-gray-50 cursor-pointer"
+                onClick={() => onProductClick(product)}
+              >
+                <td className="px-6 py-4">
+                  <div className="flex items-center">
+                    <Package className="h-8 w-8 text-gray-400 mr-3" />
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {product.name}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        ID: {product.id}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-500">
+                  {product.category}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-900">
+                  ${product.price.toLocaleString()}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-sm text-gray-900">
+                    {product.sales.toLocaleString()}
+                  </div>
+                  {product.trend && (
+                    <span className={`text-xs ${
+                      product.trend > 0 ? 'text-emerald-600' : 'text-red-500'
+                    }`}>
+                      {product.trend > 0 ? '+' : ''}{product.trend}%
+                    </span>
+                  )}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium
+                    ${product.stock > 50 ? 'bg-green-100 text-green-800' : 
+                      product.stock > 20 ? 'bg-yellow-100 text-yellow-800' : 
+                      'bg-red-100 text-red-800'}`}>
+                    {product.stock} units
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
-
-export default ProductTable;

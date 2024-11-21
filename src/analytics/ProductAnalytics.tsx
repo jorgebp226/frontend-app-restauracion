@@ -1,4 +1,5 @@
 import React from 'react';
+import { Product } from '../types/analytics';
 import { 
   LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar 
@@ -8,7 +9,19 @@ import {
   ArrowDownRight, X, ChevronLeft 
 } from 'lucide-react';
 
-const ProductDetail = ({ product, onClose }) => {
+interface ProductDetailProps {
+  product: Product;
+  onClose: () => void;
+}
+
+interface MetricCardProps {
+  title: string;
+  value: string | number;
+  trend?: number;
+  icon: React.ComponentType<{ size?: string | number; className?: string }>;
+}
+
+const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
   // Sample temporal data - In a real app, this vendría de la API
   const monthlyData = [
     { month: 'Ene', ventas2022: 580, ventas2023: 620 },

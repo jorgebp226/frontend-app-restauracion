@@ -19,7 +19,7 @@ export interface Product {
     title: string;
     value: string | number;
     trend?: number;
-    icon: React.ComponentType<{ size?: number; className?: string }>;
+    icon: React.ComponentType<{ size?: string | number; className?: string }>;
   }
   
   export interface ProductDetailProps {
