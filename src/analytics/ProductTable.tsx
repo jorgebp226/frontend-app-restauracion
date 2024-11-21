@@ -340,12 +340,9 @@ export const ProductTable: FC<ProductTableProps> = ({ onProductClick }) => {
                   )}
                 </td>
                 <td className="px-6 py-4 text-sm">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium
-                  ${(product.stock || 0) > 50 ? 'bg-green-100 text-green-800' : 
-                    (product.stock || 0) > 20 ? 'bg-yellow-100 text-yellow-800' : 
-                    'bg-red-100 text-red-800'}`}>
-                  {product.stock || 0} units
-                </span>
+                  <span className="text-sm text-gray-900">
+                    {product.profitability.toFixed(2)}%
+                  </span>
                 </td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getClassificationColor(product.classification)}`}>
