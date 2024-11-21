@@ -325,7 +325,7 @@ export const ProductTable: FC<ProductTableProps> = ({ onProductClick }) => {
                   {product.category}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-900">
-                  ${product.price.toLocaleString()}
+                  {product.price.toLocaleString()}€
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm text-gray-900">
