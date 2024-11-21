@@ -25,13 +25,13 @@ export const MetricsSection: React.FC = () => {
     <div className="grid grid-cols-2 gap-6">
       <MetricCard 
         title="Media Ponderada" 
-        value="24.68%" 
+        value="35.16%" 
         trend={5.2} 
         icon={TrendingUp}
       />
       <MetricCard 
         title="Rentabilidad Media" 
-        value="75%" 
+        value="68%" 
         trend={3.8} 
         icon={DollarSign}
       />
