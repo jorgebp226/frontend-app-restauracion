@@ -1,8 +1,8 @@
 // src/analytics/AnalyticsDashboard.tsx
-import React, { type FC } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceDot 
 } from 'recharts';
+import { MetricCardProps } from '../types/analytics';
 import { 
   Brain, 
   TrendingUp, 
@@ -15,6 +15,7 @@ import {
   MoreVertical 
 } from 'lucide-react';
 import { CustomTooltipProps } from '../types/analytics';
+import { FC } from 'react';
 
 const AIAssistantCard = () => (
   <div className="bg-emerald-50 rounded-xl p-6 shadow-sm">
@@ -160,7 +161,7 @@ const RevenueChart = () => {
   );
 };
 
-const MetricCard = ({ title, value, trend, icon: Icon }) => (
+const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }: MetricCardProps) => (
   <div className="bg-white rounded-xl p-6 shadow-sm">
     <div className="flex justify-between items-start mb-2">
       <span className="text-gray-500 text-sm">{title}</span>

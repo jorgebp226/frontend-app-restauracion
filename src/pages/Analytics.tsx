@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AIAssistantCard from '../analytics/AnalyticsDashboard';
 import { MetricsSection } from '../analytics/MetricsSection';
 import { RevenueChart } from '../analytics/RevenueChart';
-import ProductTable from '../analytics/ProductTable';
+import { ProductTable } from '../analytics/ProductTable';
 //import { ProductDetail } from '../analytics/ProductDetail';
 import { Product } from '../types/analytics';
 import { ChevronRight } from 'lucide-react';

@@ -18,6 +18,10 @@ export interface Product {
     marginPercentage: number;
     irp: number;
     classification: 'ESTRELLA' | 'PERRO' | 'PUZZLE' | 'VACA';
+    category?: string;
+    sales?: number;
+    trend?: number;
+    stock?: number;
   }
   
   export interface Column {

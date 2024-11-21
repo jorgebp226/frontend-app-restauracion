@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './layout/Sidebar';
 import AnalyticsDashboard from './analytics/AnalyticsDashboard';
 import ProductDetail from './analytics/ProductAnalytics';
 import { ProductTable } from './analytics/ProductTable';
 import { Product } from './types/analytics';
+import { useState } from 'react';
 
 const App = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
