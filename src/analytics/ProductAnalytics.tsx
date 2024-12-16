@@ -1,18 +1,27 @@
 import { type FC } from 'react';
-import { 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  ChevronLeft, 
-  X, 
-  ShoppingCart, 
-  TrendingUp, 
-  DollarSign 
+import {
+  ArrowUpRight,
+  ArrowDownRight,
+  ChevronLeft,
+  X,
+  ShoppingCart,
+  TrendingUp,
+  DollarSign,
 } from 'lucide-react';
 import { Product, MetricCardProps } from '../types/analytics';
-import { 
-  XAxis, YAxis, CartesianGrid, 
-  Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar 
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
 } from 'recharts';
+import { useData } from '../context/DataContext'; // Import the hook
 
 interface ProductDetailProps {
   product: Product;
@@ -20,23 +29,26 @@ interface ProductDetailProps {
 }
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
-  // Sample temporal data - In a real app, this vendría de la API
+  const { data } = useData(); // Use shared data hook
+
+  // Static monthly data
   const monthlyData = [
     { month: 'Ene', ventas2022: 580, ventas2023: 620 },
     { month: 'Feb', ventas2022: 540, ventas2023: 590 },
     { month: 'Mar', ventas2022: 620, ventas2023: 670 },
     { month: 'Abr', ventas2022: 590, ventas2023: 640 },
     { month: 'May', ventas2022: 610, ventas2023: 680 },
-    { month: 'Jun', ventas2022: 580, ventas2023: 630 }
+    { month: 'Jun', ventas2022: 580, ventas2023: 630 },
   ];
 
   const channelData = [
-    { name: 'Restaurante', value: 60 },
-    { name: 'Uber Eats', value: 25 },
-    { name: 'Glovo', value: 15 }
-  ];
+        { name: 'Restaurante', value: parseFloat(data.summary_results.sales_by_channel.restaurant_sales) },
+        { name: 'Uber', value: parseFloat(data.summary_results.sales_by_channel.uber_sales) },
+        { name: 'Glovo', value: parseFloat(data.summary_results.sales_by_channel.glovo_sales) },
+        { name: 'Flipdish', value: parseFloat(data.summary_results.sales_by_channel.flipdish_sales) },
+      ];
 
-  const COLORS = ['#10b981', '#6366f1', '#f59e0b'];
+  const COLORS = ['#10b981', '#6366f1', '#f59e0b', '#e11d48'];
 
   const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }) => (
     <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -63,10 +75,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
         <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-2xl">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
-              <button 
-                onClick={onClose}
-                className="text-gray-500 hover:text-gray-700"
-              >
+              <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
                 <ChevronLeft size={24} />
               </button>
               <div>
@@ -74,10 +83,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
                 <span className="text-gray-500">Código: {product.code}</span>
               </div>
             </div>
-            <button 
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
-            >
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
               <X size={24} />
             </button>
           </div>
@@ -87,22 +93,22 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
         <div className="p-6 space-y-6">
           {/* Key Metrics */}
           <div className="grid grid-cols-3 gap-6">
-            <MetricCard 
-              title="Ventas Totales" 
+            <MetricCard
+              title="Ventas Totales"
               value={`${product.totalSales.toLocaleString('es-ES')} €`}
-              trend={8.5} 
+              trend={8.5}
               icon={ShoppingCart}
             />
-            <MetricCard 
-              title="Rentabilidad" 
+            <MetricCard
+              title="Rentabilidad"
               value={`${product.profitability}%`}
-              trend={3.2} 
+              trend={3.2}
               icon={TrendingUp}
             />
-            <MetricCard 
-              title="Margen" 
+            <MetricCard
+              title="Margen"
               value={`${product.margin.toFixed(2)} €`}
-              trend={-2.1} 
+              trend={-2.1}
               icon={DollarSign}
             />
           </div>
@@ -151,15 +157,15 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose }) => {
                 </ResponsiveContainer>
                 <div className="flex justify-center gap-6">
                   {channelData.map((entry, index) => (
-                    <div key={entry.name} className="flex items-center gap-2">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
-                        style={{ backgroundColor: COLORS[index % COLORS.length] }} 
-                      />
-                      <span className="text-sm text-gray-600">
-                        {entry.name}: {entry.value}%
-                      </span>
-                    </div>
+                    <div key={entry.name} className="flex items-center gap-1">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <span className="text-sm text-gray-600">
+                      {entry.name}: {((entry.value / channelData.reduce((sum, source) => sum + source.value, 0)) * 100).toFixed(0)}%
+                    </span>
+                  </div>
                   ))}
                 </div>
               </div>
