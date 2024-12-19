@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { CustomTooltipProps } from '../types/analytics';
 import { FC } from 'react';
+import { useData } from '../context/DataContext';
 
 const AIAssistantCard = () => (
   <div className="bg-emerald-50 rounded-xl p-6 shadow-sm">
@@ -179,6 +180,28 @@ const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }: Me
 );
 
 export const AnalyticsDashboard: FC = () => {
+  const { data, loading, error } = useData(); // Add the data context hook
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex items-center justify-center h-64 text-red-600">
+        {error || 'Data not available'}
+      </div>
+    );
+  }
+
+  // Get summary values from data
+  const weightedAverage = data.summary_results?.["Media Ponderada"] || "0";
+  const averageProfitability = data.summary_results?.["Rentabilidad Media"] || "0";
+
   return (
     <div className="space-y-6">
       <div className="mb-8">
@@ -200,13 +223,13 @@ export const AnalyticsDashboard: FC = () => {
         <div className="col-span-8 grid grid-cols-2 gap-6">
           <MetricCard 
             title="Media Ponderada" 
-            value="24.68%" 
+            value={`${Number(parseFloat(weightedAverage).toFixed(2))}%`}
             trend={5.2} 
             icon={TrendingUp}
           />
           <MetricCard 
             title="Rentabilidad Media" 
-            value="75%" 
+            value={`${Number(parseFloat(averageProfitability).toFixed(2))}%`}
             trend={3.8} 
             icon={DollarSign}
           />
