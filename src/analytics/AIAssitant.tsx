@@ -68,19 +68,46 @@ const FluidAnimation = () => (
 
 interface AIAssistantProps {
   data: any;
+  userId?: string;
 }
 
-const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
+const AIAssistant: React.FC<AIAssistantProps> = ({ data, userId = 'talkierstorm' }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [conversation, setConversation] = useState<any>(null);
   const [status, setStatus] = useState('disconnected');
+  const [promptTemplate, setPromptTemplate] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Función para obtener el prompt de la API
+  const fetchPrompt = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`https://9z7lf6jl5g.execute-api.eu-west-3.amazonaws.com/Talky-BrainStorm/Talkier-Prompt?userId=${userId}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error fetching prompt');
+      }
+      
+      const data = await response.json();
+      setPromptTemplate(data.prompt);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error loading prompt template');
+      console.error('Error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Cargar el prompt cuando el componente se monta o el userId cambia
+  useEffect(() => {
+    fetchPrompt();
+  }, [userId]);
 
   const customPrompt = `
-    Eres un agente dedicado a analizar los datos de un restaurante 
-    sobre el rendimiento de los diferentes platos y tu trabajo es 
-    determinar cuales son los mejores siguientes pasos para mejorar 
-    el rendimiento del restaurante.
-
+    ${promptTemplate}
+    
     Estos son los datos actualizados al día de hoy del restaurante:
     ${JSON.stringify(data, null, 2)}
   `;
@@ -95,6 +122,8 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
   };
 
   const startConversation = async () => {
+    if (isLoading || error) return;
+    
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       
@@ -109,6 +138,7 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
         },
         onError: (error) => {
           console.error('Error:', error);
+          setError('Error en la conversación');
         },
         onModeChange: (mode) => {
           setStatus(mode.mode);
@@ -118,13 +148,20 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
       setConversation(conv);
     } catch (error) {
       console.error('Failed to start conversation:', error);
+      setError('Error al iniciar la conversación');
     }
   };
 
   const stopConversation = async () => {
     if (conversation) {
-      await conversation.endSession();
-      setConversation(null);
+      try {
+        await conversation.endSession();
+        setConversation(null);
+        setStatus('disconnected');
+      } catch (error) {
+        console.error('Error ending conversation:', error);
+        setError('Error al terminar la conversación');
+      }
     }
   };
 
@@ -135,6 +172,16 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
       }
     };
   }, [conversation]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed right-6 bottom-6 z-50">
+        <div className="bg-white rounded-3xl shadow-lg p-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -160,6 +207,7 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
                     <button
                       onClick={startConversation}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-all"
+                      disabled={isLoading || !!error}
                     >
                       <Phone className="w-4 h-4" />
                       <span className="font-medium">Empieza la llamada</span>
@@ -183,7 +231,18 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* Footer */}
+          {error && (
+            <div className="px-4 py-2 bg-red-50 border-t border-red-100">
+              <p className="text-sm text-red-600">{error}</p>
+              <button 
+                onClick={fetchPrompt}
+                className="text-sm text-red-700 hover:text-red-800 font-medium"
+              >
+                Reintentar
+              </button>
+            </div>
+          )}
+
           <div className="text-center py-1 border-t border-gray-100">
             <span className="text-xs text-gray-400">
               Powered by Talky AI

@@ -47,36 +47,36 @@ export const ProductTable: FC<ProductTableProps> = ({ onProductClick }) => {
 
   // Transform API data
   const totalSales = data.product_results.reduce((sum: number, item: any) => 
-    sum + parseFloat(item["Unidades Vendidas"]), 0);
+    sum + parseFloat(item["total_sales"] || '0'), 0);
   const totalMargin = data.product_results.reduce((sum: number, item: any) => 
-    sum + parseFloat(item["Margen Contribution Total"]), 0);
+    sum + parseFloat(item["margin_contribution"] || '0'), 0);
 
   const products: Product[] = data.product_results.map((item: any) => {
-    const totalSalesEuros = Number((convertToEuros(parseFloat(item["Ventas Totales"]))).toFixed(2));
-    const marginContribution = Number((convertToEuros(parseFloat(item["Margen Contribution Total"]))).toFixed(2));
-    const foodCostPercentage = Number(parseFloat(item["Food Cost %"]).toFixed(2));
-    const popularityIndex = Number(parseFloat(item["Indice de Popularidad"]).toFixed(2));
+    const totalSalesEuros = Number((convertToEuros(parseFloat(item["total_sales"] || '0'))).toFixed(2));
+    const marginContribution = Number((convertToEuros(parseFloat(item["margin_contribution"] || '0'))).toFixed(2));
+    const foodCostPercentage = Number(parseFloat(item["food_cost_percentage"] || '0').toFixed(2));
+    const popularityIndex = Number(parseFloat(item["popularity_index"] || '0').toFixed(2));
 
-  return {
-    code: item["Nombre"].substring(0, 4),
-    name: item["Modifier"] ? `${item["Nombre"]} - ${item["Modifier"]}` : item["Nombre"],
-    cost: Number((convertToEuros(parseFloat(item["Coste del Producto"]))).toFixed(2)),
-    price: Number((convertToEuros(parseFloat(item["Precio de Venta"]))).toFixed(2)),
-    priceNoVAT: Number((convertToEuros(parseFloat(item["PVP sin IVA"]))).toFixed(2)),
-    popularityIndex,
-    foodCost: foodCostPercentage,
-    profitability: Number(parseFloat(item["Rentabilidad %"]).toFixed(2)),
-    totalSales: totalSalesEuros,
-    totalContribution: marginContribution,
-    totalCost: Number((convertToEuros(parseFloat(item["Coste Total"]))).toFixed(2)),
-    unitsSold: parseInt(item["Unidades Vendidas"], 10),
-    margin: Number((convertToEuros(parseFloat(item["Margen"]))).toFixed(2)),
-    salesPercentage: Number(parseFloat(item["% Ventas"]).toFixed(2)),
-    marginPercentage: Number(parseFloat(item["% Margen"]).toFixed(2)),
-    irp: Number(parseFloat(item["IRP"]).toFixed(2)),
-    classification: item["Clasificación Final"] as 'ESTRELLA' | 'PERRO' | 'PUZZLE' | 'VACA',
-  };
-});
+    return {
+      code: item["name"] ? item["name"].substring(0, 4) : 'N/A',
+      name: item["modifier"] ? `${item["name"]} - ${item["modifier"]}` : (item["name"] || 'N/A'),
+      cost: Number((convertToEuros(parseFloat(item["cost"] || '0'))).toFixed(2)),
+      price: Number((convertToEuros(parseFloat(item["price"] || '0'))).toFixed(2)),
+      priceNoVAT: Number((convertToEuros(parseFloat(item["pvp_sin_iva"] || '0'))).toFixed(2)),
+      popularityIndex,
+      foodCost: foodCostPercentage,
+      profitability: Number(parseFloat(item["profitability"] || '0').toFixed(2)),
+      totalSales: totalSalesEuros,
+      totalContribution: marginContribution,
+      totalCost: Number((convertToEuros(parseFloat(item["total_cost"] || '0'))).toFixed(2)),
+      unitsSold: parseInt(item["units_sold"] || '0', 10),
+      margin: Number((convertToEuros(parseFloat(item["margin"] || '0'))).toFixed(2)),
+      salesPercentage: Number(parseFloat(item["sales_percentage"] || '0').toFixed(2)),
+      marginPercentage: Number(parseFloat(item["margin_percentage"] || '0').toFixed(2)),
+      irp: Number(parseFloat(item["irp"] || '0').toFixed(2)),
+      classification: item["classification"] as 'ESTRELLA' | 'PERRO' | 'PUZZLE' | 'VACA',
+    };
+  });
 
   const handleSort = (data: Product[], key: keyof Product, direction: 'asc' | 'desc'): Product[] => {
     return [...data].sort((a, b) => {
