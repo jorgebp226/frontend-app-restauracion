@@ -1,23 +1,35 @@
 // src/analytics/AnalyticsDashboard.tsx
+import React, { FC } from 'react';
 import { 
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceDot 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  Tooltip, 
+  ResponsiveContainer, 
+  ReferenceDot 
 } from 'recharts';
-import { MetricCardProps } from '../types/analytics';
 import { 
   Brain, 
   TrendingUp, 
   DollarSign, 
   ChevronRight, 
   X,
-  Download, // Cambiado de ArrowDownload
-  RefreshCw, // Cambiado de RefreshCcw
+  Download,
+  RefreshCw,
   Share2, 
-  MoreVertical 
+  MoreVertical,
+  Mic
 } from 'lucide-react';
-import { CustomTooltipProps } from '../types/analytics';
-import { FC } from 'react';
+// Importa el componente AIAssistant desde la carpeta components
+import AIAssistant from '../analytics/AIAssitant';
+
+import { CustomTooltipProps, MetricCardProps } from '../types/analytics';
 import { useData } from '../context/DataContext';
 
+//
+// Componente AIAssistantCard
+//
 const AIAssistantCard = () => (
   <div className="bg-emerald-50 rounded-xl p-6 shadow-sm">
     <div className="flex justify-between items-start mb-4">
@@ -41,7 +53,10 @@ const AIAssistantCard = () => (
   </div>
 );
 
-const RevenueChart = () => {
+//
+// Componente RevenueChart
+//
+const RevenueChart: FC = () => {
   const data = [
     { month: 'Mar', revenue2022: 30, revenue2023: 32 },
     { month: 'Apr', revenue2022: 28, revenue2023: 31 },
@@ -98,11 +113,21 @@ const RevenueChart = () => {
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+          <LineChart 
+            data={data} 
+            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+          >
             <defs>
-              <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
-                <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" 
-                      style={{ stroke: '#94a3b8', strokeWidth: 1 }} />
+              <pattern 
+                id="diagonalHatch" 
+                patternUnits="userSpaceOnUse" 
+                width="4" 
+                height="4"
+              >
+                <path 
+                  d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" 
+                  style={{ stroke: '#94a3b8', strokeWidth: 1 }} 
+                />
               </pattern>
             </defs>
 
@@ -162,7 +187,10 @@ const RevenueChart = () => {
   );
 };
 
-const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }: MetricCardProps) => (
+//
+// Componente MetricCard
+//
+const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }) => (
   <div className="bg-white rounded-xl p-6 shadow-sm">
     <div className="flex justify-between items-start mb-2">
       <span className="text-gray-500 text-sm">{title}</span>
@@ -179,8 +207,11 @@ const MetricCard: FC<MetricCardProps> = ({ title, value, trend, icon: Icon }: Me
   </div>
 );
 
+//
+// Componente principal AnalyticsDashboard
+//
 export const AnalyticsDashboard: FC = () => {
-  const { data, loading, error } = useData(); // Add the data context hook
+  const { data, loading, error } = useData();
 
   if (loading) {
     return (
@@ -197,10 +228,6 @@ export const AnalyticsDashboard: FC = () => {
       </div>
     );
   }
-
-  // Get summary values from data
-  const weightedAverage = data.summary_results?.["Media Ponderada"] || "0";
-  const averageProfitability = data.summary_results?.["Rentabilidad Media"] || "0";
 
   return (
     <div className="space-y-6">
@@ -223,13 +250,13 @@ export const AnalyticsDashboard: FC = () => {
         <div className="col-span-8 grid grid-cols-2 gap-6">
           <MetricCard 
             title="Media Ponderada" 
-            value={`${Number(parseFloat(weightedAverage).toFixed(2))}%`}
+            value={`${Number(parseFloat(data.summary_results?.["Media Ponderada"] || "0").toFixed(2))}%`}
             trend={5.2} 
             icon={TrendingUp}
           />
           <MetricCard 
             title="Rentabilidad Media" 
-            value={`${Number(parseFloat(averageProfitability).toFixed(2))}%`}
+            value={`${Number(parseFloat(data.summary_results?.["Rentabilidad Media"] || "0").toFixed(2))}%`}
             trend={3.8} 
             icon={DollarSign}
           />
@@ -240,6 +267,9 @@ export const AnalyticsDashboard: FC = () => {
           <RevenueChart />
         </div>
       </div>
+
+      {/* Asistente de IA */}
+      <AIAssistant data={data} />
     </div>
   );
 };

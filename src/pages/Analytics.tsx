@@ -1,16 +1,39 @@
-import React, { useState } from 'react';
-import AIAssistantCard from '../analytics/AnalyticsDashboard';
+import React, { useState, useEffect, useRef } from 'react';
+import AIAssistantCard from '../analytics/AIAssistantCard';
 import { MetricsSection } from '../analytics/MetricsSection';
 import { RevenueChart } from '../analytics/RevenueChart';
 import { ProductTable } from '../analytics/ProductTable';
-//import { ProductDetail } from '../analytics/ProductDetail';
 import { Product } from '../types/analytics';
 import { ChevronRight } from 'lucide-react';
 
 const Analytics: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const scriptRef = useRef<HTMLScriptElement | null>(null);
 
   console.log('Selected product:', selectedProduct);
+
+  useEffect(() => {
+    // Verificar si el script ya existe
+    if (!document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
+      const script = document.createElement('script');
+      script.src = "https://elevenlabs.io/convai-widget/index.js";
+      script.async = true;
+      script.type = "text/javascript";
+      
+      // Guardar referencia al script
+      scriptRef.current = script;
+      
+      // Añadir el script al head en lugar del body
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      // Limpiar el script solo si existe y fue creado por este componente
+      if (scriptRef.current && document.head.contains(scriptRef.current)) {
+        document.head.removeChild(scriptRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -45,9 +68,15 @@ const Analytics: React.FC = () => {
         <div className="col-span-12">
           <ProductTable onProductClick={setSelectedProduct} />
         </div>
+
+        {/* Widget de Eleven Labs */}
+        <div className="col-span-12 h-96">
+          <elevenlabs-convai 
+            agent-id="lPO1BIgKKe78sqesK86E"
+            className="w-full h-full"
+          />
+        </div>
       </div>
-
-
     </div>
   );
 };
